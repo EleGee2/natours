@@ -1,0 +1,15 @@
+extends base
+
+block content
+  main.main
+    .review-form
+      h2.heading-secondary.ma-bt-lg Create Review On Tour
+      form.form.form--review
+        .form__group
+          label.form__label(for='review') Review
+          input#review.form__input(type='text', required)
+        .form__group.ma-bt-md
+          label.form__label(for='rating') Rating
+          input#rating.form__input(type='number',placeholder= 'Between 1 and 5',required)
+        .form__group
+          button.btn.btn--green#reviewss(data-tour-id= `${tourID}`) Submit Review
