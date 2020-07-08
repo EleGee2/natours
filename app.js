@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -86,12 +87,14 @@ app.use(
   })
 );
 
+app.use(compression());
+
 // Serving Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Test Middleware
 app.use((req, res, next) => {
-  console.log('Hello from the middleware');
+  //console.log('Hello from the middleware');
   next();
 });
 
