@@ -1,33 +1,40 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
-const htmlToText = require('html-to-text'); 
+const htmlToText = require('html-to-text');
 
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Jerome Kene 👻 <${process.env.EMAIL_FROM}>`
+    this.from = `Jerome Kene 👻 <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       // Sendgrid
-      return 1
+      return nodemailer.createTransport({
+        service: 'Postmark',
+        auth: {
+          user: process.env.POSTMARK_USERNAME,
+          pass: process.env.POSTMARK_PASSWORD,
+        },
+      });
     }
 
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
-      tls: { rejectUnauthorized: false} ,
+      tls: { rejectUnauthorized: false },
       port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
-      }, function(err) {
-          if(err) {
-              console.log(err);
-          }
-      }
+      },
+      function(err) {
+        if (err) {
+          console.log(err);
+        }
+      },
     });
   }
 
@@ -37,8 +44,8 @@ module.exports = class Email {
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
-      subject
-    })
+      subject,
+    });
 
     // 2. Define the options
     const mailOptions = {
@@ -51,22 +58,20 @@ module.exports = class Email {
 
     // 3. Cretae a transport and send email
     await this.newTransport().sendMail(mailOptions);
-
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to the Natours Family')
+    await this.send('welcome', 'Welcome to the Natours Family');
   }
 
   async sendPasswordReset() {
-    await this.send('passwordReset', 'Your password reset token (valid for only 10mins)')
+    await this.send(
+      'passwordReset',
+      'Your password reset token (valid for only 10mins)'
+    );
   }
 
   async sendConfirmEmail() {
-    await this.send('confirmEmail', 'Verify Email Address for Natours')
+    await this.send('confirmEmail', 'Verify Email Address for Natours');
   }
 };
-
-
-
-
