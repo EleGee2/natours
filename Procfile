@@ -1,1 +1,1 @@
-web: node start:prod
+web: nodemon server.js
