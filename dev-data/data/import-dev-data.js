@@ -5,8 +5,7 @@ const Tour = require('../../models/toursModel');
 const User = require('../../models/userModel');
 const Review = require('../../models/reviewModel');
 
-
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: '../../config.env' });
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -16,8 +15,6 @@ const DB = process.env.DATABASE.replace(
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
     useUnifiedTopology: true,
   })
   .then((con) => {

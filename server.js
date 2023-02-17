@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
 dotenv.config({ path: './config.env' });
 
 process.on('uncaughtException', err => {
@@ -18,8 +19,6 @@ const DB = process.env.DATABASE.replace(
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
     useUnifiedTopology: true,
   })
   .then((con) => {
