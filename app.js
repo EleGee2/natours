@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const compression = require('compression');
 
+const { models } = require('mongoose');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./Routes/tourRoutes.js');
@@ -17,7 +18,6 @@ const userRouter = require('./Routes/userRoutes.js');
 const reviewRouter = require('./Routes/reviewRoutes.js');
 const bookingRouter = require('./Routes/bookingRoutes.js');
 const viewRouter = require('./Routes/viewRoutes.js');
-const { models } = require('mongoose');
 const User = require('./models/userModel');
 const authController = require('./controllers/authController');
 
@@ -30,8 +30,8 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/verify/:token', async (req, res) => {
-  const token = req.params.token;
+app.get('/verify/:token', async (req, res, next) => {
+  const {token} = req.params;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const currentUser = await User.findByIdAndUpdate(decoded.id, {
     confirmed: true,
@@ -48,6 +48,7 @@ app.post('/token', authController.verifyRefreshToken);
 
 //Set Security HTTP Headers
 app.use(helmet());
+
 
 // Development Logging
 if (process.env.NODE_ENV === 'development') {

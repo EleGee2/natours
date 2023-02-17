@@ -20,6 +20,8 @@ const rev = document.getElementById('reviewss')
 const reviewBtn = document.querySelector('.form--review');
 const likeBtn = document.querySelector('.like-button')
 
+console.log(loginForm.value)
+
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
