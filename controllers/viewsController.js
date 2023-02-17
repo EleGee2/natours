@@ -30,7 +30,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
   }
   try {
     const bookings = await Booking.find({ user: req.user.id });
-    const tourIDs = bookings.find((el) => el.tour.name == tour.name);
+    const tourIDs = bookings.find((el) => el.tour.name === tour.name);
     if (!tourIDs) tours = undefined;
     else {
       tours = tourIDs.tour.name;
